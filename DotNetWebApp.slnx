@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BootcampWebApp/BootcampWebApp.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BootcampWebApp.Tests/BootcampWebApp.Tests.csproj" />
+  </Folder>
+</Solution>
