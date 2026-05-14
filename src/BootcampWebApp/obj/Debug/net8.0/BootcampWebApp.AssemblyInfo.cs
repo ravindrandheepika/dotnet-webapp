@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BootcampWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef6f2d217929066d7f5120ade7248f1d74a14dfb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb492d90869296c0678cde6f7bc34f516baeb102")]
 [assembly: System.Reflection.AssemblyProductAttribute("BootcampWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BootcampWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
