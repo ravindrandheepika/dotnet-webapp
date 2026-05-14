@@ -15,8 +15,9 @@ steps:
       version: '8.0.x'
 
   - script: |
+      echo "##vso[task.prependpath]$(Agent.ToolsDirectory)/dotnet"
       dotnet --info
-    displayName: 'Check .NET SDK version'
+    displayName: 'Force .NET 8 SDK path'
 
   - task: DotNetCoreCLI@2
     displayName: 'Restore'
