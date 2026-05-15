@@ -10,7 +10,7 @@ variables:
 stages:
 
 # -------------------------
-# BUILD STAGE (your pipeline unchanged)
+# BUILD STAGE
 # -------------------------
 - stage: Build
   displayName: "Build Stage"
@@ -68,76 +68,88 @@ stages:
           publishLocation: 'Container'
 
 # -------------------------
-# DEPLOY STAGE (new)
+# DEV DEPLOYMENT
 # -------------------------
 - stage: Deploy
-  displayName: "Deploy to Azure Web App"
+  displayName: "Deploy to Dev"
   dependsOn: Build
   jobs:
-  - job: DeployJob
-    displayName: "Deploy Job"
-    steps:
-      - task: DownloadBuildArtifacts@1
-        displayName: "Download Build Artifact"
-        inputs:
-          buildType: 'current'
-          artifactName: 'drop'
-          downloadPath: '$(Pipeline.Workspace)'
+  - deployment: DeployDev
+    displayName: "Deploy to Dev App Service"
+    environment: 'Dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadBuildArtifacts@1
+              displayName: "Download Build Artifact"
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                downloadPath: '$(Pipeline.Workspace)'
 
-      - task: AzureWebApp@1
-        displayName: "Deploy to App Service"
-        inputs:
-          azureSubscription: 'AzureConnection'
-          appType: 'webApp'
-          appName: 'bootcampwebapp-dev'
-          package: '$(Pipeline.Workspace)/drop/**/*.zip'
+            - task: AzureWebApp@1
+              displayName: "Deploy to Dev App Service"
+              inputs:
+                azureSubscription: 'AzureConnection'
+                appType: 'webApp'
+                appName: 'bootcampwebapp-dev'
+                package: '$(Pipeline.Workspace)/drop/**/*.zip'
 
 # -------------------------
-# STAGING STAGE
+# STAGING DEPLOYMENT
 # -------------------------
 - stage: Deploy_Staging
   displayName: "Deploy to Staging"
   dependsOn: Deploy
   jobs:
-  - job: DeployStagingJob
+  - deployment: DeployStaging
     displayName: "Deploy to Staging App Service"
-    steps:
-      - task: DownloadBuildArtifacts@1
-        displayName: "Download Build Artifact"
-        inputs:
-          buildType: 'current'
-          artifactName: 'drop'
-          downloadPath: '$(Pipeline.Workspace)'
+    environment: 'Staging'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadBuildArtifacts@1
+              displayName: "Download Build Artifact"
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                downloadPath: '$(Pipeline.Workspace)'
 
-      - task: AzureWebApp@1
-        displayName: "Deploy to Staging App Service"
-        inputs:
-          azureSubscription: 'AzureConnection'
-          appType: 'webApp'
-          appName: 'bootcampwebapp-staging'
-          package: '$(Pipeline.Workspace)/drop/**/*.zip'
+            - task: AzureWebApp@1
+              displayName: "Deploy to Staging App Service"
+              inputs:
+                azureSubscription: 'AzureConnection'
+                appType: 'webApp'
+                appName: 'bootcampwebapp-staging'
+                package: '$(Pipeline.Workspace)/drop/**/*.zip'
 
 # -------------------------
-# PRODUCTION STAGE
+# PRODUCTION DEPLOYMENT
 # -------------------------
 - stage: Deploy_Production
   displayName: "Deploy to Production"
   dependsOn: Deploy_Staging
   jobs:
-  - job: DeployProdJob
+  - deployment: DeployProd
     displayName: "Deploy to Production App Service"
-    steps:
-      - task: DownloadBuildArtifacts@1
-        displayName: "Download Build Artifact"
-        inputs:
-          buildType: 'current'
-          artifactName: 'drop'
-          downloadPath: '$(Pipeline.Workspace)'
+    environment: 'Production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadBuildArtifacts@1
+              displayName: "Download Build Artifact"
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                downloadPath: '$(Pipeline.Workspace)'
 
-      - task: AzureWebApp@1
-        displayName: "Deploy to Production App Service"
-        inputs:
-          azureSubscription: 'AzureConnection'
-          appType: 'webApp'
-          appName: 'bootcampwebapp-prod'
-          package: '$(Pipeline.Workspace)/drop/**/*.zip'
+            - task: AzureWebApp@1
+              displayName: "Deploy to Production App Service"
+              inputs:
+                azureSubscription: 'AzureConnection'
+                appType: 'webApp'
+                appName: 'bootcampwebapp-prod'
+                package: '$(Pipeline.Workspace)/drop/**/*.zip'
